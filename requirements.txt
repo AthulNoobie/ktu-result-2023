@@ -4,5 +4,4 @@ pandas
 dash_html_components
 dash_core_components
 dash_table
-dash.dependencies
 dash_bootstrap_components
