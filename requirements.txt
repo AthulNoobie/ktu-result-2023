@@ -1,2 +1,2 @@
 dash
-dash_bootstrap_componenets
+dash_bootstrap_components
