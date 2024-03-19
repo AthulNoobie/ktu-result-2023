@@ -1,11 +1,11 @@
 {
   "routes": [
     { "handle": "filesystem" },
-    { "src": "/(.*)", "dest": "/main.py" }
+    { "src": "/(.*)", "dest": "app/index.py" }
   ],
   "builds": [
     {
-      "src": "/main.py",
+      "src": "/app/index.py",
       "use": "@vercel/python"
     }
   ]
