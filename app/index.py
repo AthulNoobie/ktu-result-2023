@@ -1,9 +1,9 @@
 from dash import Dash,html,dcc,dash_table,no_update
 from dash.dependencies import Input, Output, State
 import dash_bootstrap_components as dbc
+from os.path import join
 
-
-with open("id_name.txt", 'r') as f1, open("temp.txt", 'r') as f2:
+with open(join("data","id_name.txt"), 'r') as f1, open(join("data","temp.txt"), 'r') as f2:
     ktu_id = f1.readlines()
     name = f2.readlines()
     id_name = dict()
@@ -12,7 +12,7 @@ with open("id_name.txt", 'r') as f1, open("temp.txt", 'r') as f2:
 
 app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP],title='ktu results 2023',update_title='loading...')
 
-with open('result.csv', 'r') as f:
+with open(join('data','result.csv'), 'r') as f:
     data = f.readlines()
 
 def extract_results(ktu_id_value):
