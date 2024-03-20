@@ -1,12 +1,15 @@
 {
-  "routes": [
-    { "handle": "filesystem" },
-    { "src": "/(.*)", "dest": "app/index.py" }
-  ],
-  "builds": [
-    {
-      "src": "/app/index.py",
-      "use": "@vercel/python"
-    }
-  ]
+    "version": 2,
+    "builds": [
+        {
+            "src": "app/index.py",
+            "use": "@vercel/python"
+        }
+    ],
+    "routes": [
+        {
+            "src": "(.*)",
+            "dest": "app/index.py"
+        }
+    ]
 }
