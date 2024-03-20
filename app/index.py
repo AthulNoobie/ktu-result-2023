@@ -1,12 +1,6 @@
-import dash
-import pandas as pd
-import dash_html_components as html
-import dash_core_components as dcc
-import dash_table
+from dash import Dash,html,dcc,dash_table,no_update
 from dash.dependencies import Input, Output, State
 import dash_bootstrap_components as dbc
-
-# Assuming you have imported dash_bootstrap_components and have a valid login page URL
 
 with open("id_name.txt", 'r') as f1, open("temp.txt", 'r') as f2:
     ktu_id = f1.readlines()
@@ -15,7 +9,7 @@ with open("id_name.txt", 'r') as f1, open("temp.txt", 'r') as f2:
     for i in range(66):
         id_name[ktu_id[i].strip()] = name[i].strip()
 
-app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
+app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP],title='ktu results 2023',update_title='loading...')
 
 with open('result.csv', 'r') as f:
     data = f.readlines()
@@ -34,7 +28,7 @@ def extract_results(ktu_id_value):
                 break 
         index += 1
     return results
-
+    
 app.layout = html.Div([
     html.Div(style={'position': 'relative', 'height': '75px', 'width': '100%', 'background-color': '#B1D4E0'}),
     html.P("APJ Abdul Kalam Technological University",
@@ -84,7 +78,7 @@ app.layout = html.Div([
     html.Div([
         dcc.Location(id='url', refresh=False),
         html.Button("Submit", id="submit-button", n_clicks=0, style={'width': '75px'})
-    ], style={'position': 'absolute', 'margin-top': '170px', 'margin-left': '77px'}),
+    ], style={'position': 'absolute', 'margin-top': '160px', 'margin-left': '77px'}),
 
     html.Div(id='output-container', style={'margin-top': '200px'}),
     html.Div("contact:support@ktu.ac.in", style={'position': 'absolute', 'top': '40px', 'right': '10px','font-size':'9px','color':'red'}),
@@ -107,25 +101,30 @@ app.layout = html.Div([
 )
 def update_output(n_clicks, ktu_id_value, year_value, sem_value):
     if n_clicks > 0:
-        if ktu_id_value in id_name:
-            if sem_value == 'S1' and year_value == '2023':
-                student_name = id_name[ktu_id_value]
-                student_results = extract_results(ktu_id_value)
-                if student_results:
-                    result_table = dash_table.DataTable(
-                        id='result-table',
-                        columns=[{'name': 'Course', 'id': 'Course'},
-                                 {'name': 'Grade', 'id': 'Grade'},
-                                 {'name': 'Credit', 'id': 'Credit'},
-                                 {'name': 'Remark', 'id': 'Remark'}],
-                        data=[{'Course': result[0], 'Grade': result[1], 'Credit': result[2], 'Remark': result[3]} for result in student_results]
-                    )
-                    return [f"Student Name: {student_name}", result_table]
+        if ktu_id_value:
+            if ktu_id_value in id_name:
+                if sem_value == 'S1' and year_value == '2023':
+                    student_name = id_name[ktu_id_value]
+                    student_results = extract_results(ktu_id_value)
+                    if student_results:
+                        result_table = dash_table.DataTable(
+                            id='result-table',
+                            columns=[{'name': 'Course', 'id': 'Course'},
+                                     {'name': 'Grade', 'id': 'Grade'},
+                                     {'name': 'Credit', 'id': 'Credit'},
+                                     {'name': 'Remark', 'id': 'Remark'}],
+                            data=[{'Course': result[0], 'Grade': result[1], 'Credit': result[2], 'Remark': result[3]} for result in student_results]
+                        )
+                        return [f"Student Name: {student_name}", result_table]
+                    else:
+                        return "No results found for the student"
                 else:
-                    return "No results found for the student"
+                    return "Student not found"
             else:
                 return "Student not found"
-    return dash.no_update
+        else:
+            return "Student not found"
+    return no_update
 
 @app.callback(
     [Output('ktu_id', 'disabled'),
@@ -140,4 +139,4 @@ def disable_inputs(n_clicks):
         return False, False, False
 
 if __name__ == '__main__':
-    app.run(port=8080, dev_tools_ui=True, debug=True, host="127.0.0.1")
+    app.run_server(debug=True)
