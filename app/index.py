@@ -139,4 +139,4 @@ def disable_inputs(n_clicks):
         return False, False, False
 
 if __name__ == '__main__':
-    app.run_server(debug=True)
+    app.run_server(port=8080, dev_tools_ui=True, debug=True, host="127.0.0.1")
