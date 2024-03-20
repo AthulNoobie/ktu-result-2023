@@ -1,6 +1,7 @@
 from dash import Dash,html,dcc,dash_table,no_update
 from dash.dependencies import Input, Output, State
 import dash_bootstrap_components as dbc
+from os.path import join
 
 with open(join('data',"id_name.txt", 'r')) as f1, open(join('data',"temp.txt", 'r')) as f2:
     ktu_id = f1.readlines()
