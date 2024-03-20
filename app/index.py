@@ -1,9 +1,9 @@
 from dash import Dash,html,dcc,dash_table,no_update
 from dash.dependencies import Input, Output, State
 import dash_bootstrap_components as dbc
-from os.path import join
 
-with open(join('data',"id_name.txt"),'r') as f1, open(join('data',"temp.txt"),'r') as f2:
+
+with open("id_name.txt", 'r') as f1, open("temp.txt", 'r') as f2:
     ktu_id = f1.readlines()
     name = f2.readlines()
     id_name = dict()
@@ -12,7 +12,7 @@ with open(join('data',"id_name.txt"),'r') as f1, open(join('data',"temp.txt"),'r
 
 app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP],title='ktu results 2023',update_title='loading...')
 
-with open(join('data','result.csv'),'r') as f:
+with open('result.csv', 'r') as f:
     data = f.readlines()
 
 def extract_results(ktu_id_value):
@@ -29,9 +29,17 @@ def extract_results(ktu_id_value):
                 break 
         index += 1
     return results
+class MainApplication:
+    def __init__(self,test):
+        self.__app = test
+        self.set_layout()
+
+    @property
+    def app(self):
+        return self.__app
     
-app.layout = html.Div([
-    html.Div(style={'position': 'relative', 'height': '75px', 'width': '100%', 'background-color': '#B1D4E0'}),
+    def set_layout(self):
+        self.app.layout= html.Div([    html.Div(style={'position': 'relative', 'height': '75px', 'width': '100%', 'background-color': '#B1D4E0'}),
     html.P("APJ Abdul Kalam Technological University",
             style={'position': 'absolute', 'left': '40px', 'top': '6px', 'color': 'blue','font-style':'sans-serif','font-size':'14px'}),
     html.Img(src='https://upload.wikimedia.org/wikipedia/en/1/12/APJ_Abdul_Kalam_Technological_University_logo.png',
@@ -90,8 +98,7 @@ app.layout = html.Div([
         html.A("Academics|", href="#", style={'color': 'blue', 'margin-right': '2px', 'border': '0px solid black', 'padding': '1px'}),
         html.A("|Events|", href="#", style={'color': 'blue', 'border': '0px solid black', 'padding': '0px'}),
     ], style={'position': 'absolute', 'top': '50px', 'right': '15px'}),
-    html.A("Login", href="https://app.ktu.edu.in/", style={'color': 'blue','top':'0px','right':'4px','position':'absolute'})
-])
+    html.A("Login", href="https://app.ktu.edu.in/", style={'color': 'blue','top':'0px','right':'4px','position':'absolute'})])
 
 @app.callback(
     Output('output-container', 'children'),
@@ -139,5 +146,8 @@ def disable_inputs(n_clicks):
     else:
         return False, False, False
 
-if __name__ == '__main__':
-    app.server.run(port=8080,debug=True, host="127.0.0.1")
+Application = MainApplication(app)
+app = Application.app.server
+
+if __name__ == "__main__":
+    Application.app.run(port=8080, dev_tools_ui=True, debug=True, host="127.0.0.1")
