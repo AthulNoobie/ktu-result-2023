@@ -11,8 +11,5 @@
             "src": "(.*)",
             "dest": "app/index.py"
         }
-    ],
-  "engines": {
-    "node": "18.x"
-  }
+    ]
 }
