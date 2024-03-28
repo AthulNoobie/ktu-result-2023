@@ -4,6 +4,7 @@
         {
             "src": "app/index.py",
             "use": "@natanffs/vercel-python-wsgi"
+            "config": { "maxLambdaSize": "15mb", "runtime": "python3.8" }
         }
     ],
     "routes": [
